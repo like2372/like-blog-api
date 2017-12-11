@@ -210,13 +210,17 @@ public class ArticleService {
 		
 	}
 
-	public String deleteArticleData(String articleId) {
+	public String deleteArticleData(String articleJson) {
 		
 		String resultCode="";
 		
 		JSONObject resultJson=new JSONObject();
 		
 		try{
+			
+			JSONObject articleStringJson=JSONObject.fromObject(articleJson);
+			
+			String articleId=articleStringJson.getString("id");
 			
 			String sql="delete from article where id=?";							
 			

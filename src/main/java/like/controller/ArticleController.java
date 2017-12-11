@@ -51,8 +51,8 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(value="/updateArticleData",method=RequestMethod.POST)
-	public String updateArticleData(HttpServletRequest res){		
-		
+	public String updateArticleData(HttpServletRequest res,@RequestParam  String articleJson){		
+	
 		String articleId=res.getParameter("articleId");
 		
 		String articleTitle=res.getParameter("articleTitle");
@@ -67,10 +67,8 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(value="/deleteArticleData",method=RequestMethod.POST)
-	public String deleteArticleData(HttpServletRequest res){	
-		
-		String articleId=res.getParameter("articleId");
-				
-		return articleService.deleteArticleData(articleId);	
+	public String deleteArticleData(HttpServletRequest res,@RequestParam  String articleJson){	
+						
+		return articleService.deleteArticleData(articleJson);	
 	}
 }
