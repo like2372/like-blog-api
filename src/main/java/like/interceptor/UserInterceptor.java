@@ -44,18 +44,15 @@ public class UserInterceptor implements HandlerInterceptor{
 			return true;
 		}
 		
-		String auth = req.getHeader("auth");
+		String auth = req.getHeader("Authorization");		
+		
 		if (StringUtils.isEmpty(auth)) {
             responseWithError(res);
             return false;
         }
 		
-		
-		String s = new String(Base64.decodeBase64(auth),"UTF-8");
-        if (StringUtils.isNotEmpty(s)) {
-            String[] split = s.split("\n");
-            String token = split[1];
-            boolean right = JWTUtil.validToken(token);
+        if (StringUtils.isNotEmpty(auth)) {
+            boolean right = JWTUtil.validToken(auth);
             if (right) {
                 return true;
             }

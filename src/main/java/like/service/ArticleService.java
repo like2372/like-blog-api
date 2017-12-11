@@ -39,7 +39,7 @@ public class ArticleService {
 		
 		try{
 			
-			String sql="select id,article_title,article_time,article_short_content from article ";
+			String sql="select id,article_title,article_time,article_short_content from article order by article_time desc";
 			
 			if(start!=null&&start!=""&&end!=null&&end!=""){
 				

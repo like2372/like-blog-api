@@ -65,13 +65,8 @@ public class JWTUtil {
         try {
             Claims claims = parseToken(token);
             JSONObject json=JSONObject.fromObject(claims);
-            if(json.containsKey("sub")){
-            	JSONObject subJson=json.getJSONObject("sub");
-            	if(StringUtils.isNotEmpty(subJson.getString("id"))&&StringUtils.isNotEmpty(subJson.getString("userName"))){
-            		return true;
-            	}else{
-            		return false;
-            	}
+            if(json.containsKey("sub")){           	
+            		return true;            	
             }else{
             	return false;
             }
