@@ -1,5 +1,8 @@
 package like.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 import javax.servlet.http.HttpServletRequest;
 
 import like.service.UserService;
@@ -17,17 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @EnableAutoConfiguration
 @RequestMapping("/userService")
+@Api("UserController相关api")
 public class UserController {
 	
 	@Autowired
 	UserService userService;
-	
-	 @RequestMapping("/")  
-	   public String home() {  
-	        return "Hello World!";  
-	    }  
 	 
-	 @RequestMapping("/checkUser")
+	 @ApiOperation("检查用户是否存在")
+	 @RequestMapping(value="/checkUser",method=RequestMethod.GET)
 	 public String checkUser(HttpServletRequest res){		 
 		 
 		 String userName=res.getParameter("userName");
@@ -37,6 +37,7 @@ public class UserController {
 		 return userService.checkUser(userName,password);		 
 	 }
 	 
+	 @ApiOperation("增加新用户")
 	 @RequestMapping(value="/addUser",method=RequestMethod.POST)
 	 public String addUser(HttpServletRequest res){
 		 
@@ -48,6 +49,7 @@ public class UserController {
 		 
 	 }
 	 
+	 @ApiOperation("根据用户id删除用户")
 	 @RequestMapping(value="/delUser",method=RequestMethod.POST)
 	 public String delUser(HttpServletRequest res){
 		 
