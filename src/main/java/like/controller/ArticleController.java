@@ -92,4 +92,12 @@ public class ArticleController {
 						
 		return articleService.deleteArticleData(articleJson);	
 	}
+	
+	
+	@ApiOperation("根据文章id修改浏览量")
+	@RequestMapping(value="/updateArticlePageView",method=RequestMethod.GET)
+	public String updateArticlePageView(HttpServletRequest res,@RequestParam  String articleJson){	
+						
+		return articleService.updateArticlePageView(articleJson);	
+	}
 }

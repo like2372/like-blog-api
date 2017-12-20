@@ -39,7 +39,7 @@ public class ArticleService {
 		
 		try{
 			
-			String sql="select id,article_title,article_time,article_short_content from article order by article_time desc";
+			String sql="select id,article_title,article_time,article_short_content,article_page_view from article order by article_time desc";
 			
 			if(start!=null&&start!=""&&end!=null&&end!=""){
 				
@@ -60,14 +60,22 @@ public class ArticleService {
 				
 				String articleTime=rowMap.get("article_time")==null?"":rowMap.get("article_time").toString();
 				
+				if(articleTime!=null&&articleTime!=""){
+					
+					articleTime=articleTime.substring(0,articleTime.length()-2);
+					
+				}
+				
 				String articleShortContent=rowMap.get("article_short_content")==null?"":rowMap.get("article_short_content").toString();
 				
+				String articlePageView=rowMap.get("article_page_view")==null?"":rowMap.get("article_page_view").toString();
 				//String articleContent=rowMap.get("article_content")==null?"":rowMap.get("article_content").toString();
 				
 				rowJson.put("id", id);			
 				rowJson.put("articleTitle", articleTitle);
 				rowJson.put("articleTime", articleTime);
 				rowJson.put("articleShortContent",articleShortContent);
+				rowJson.put("articlePageView",articlePageView);
 				//rowJson.put("articleContent", articleContent);
 				
 				jsonArray.add(rowJson);
@@ -112,7 +120,7 @@ public class ArticleService {
 		
 		try{
 			
-			String sql="select id,article_title,article_time,article_short_content,article_content from article where 1=1 ";
+			String sql="select id,article_title,article_time,article_short_content,article_content,article_page_view from article where 1=1 ";
 			
 			if(id!=null&&id!=""){
 				
@@ -131,15 +139,24 @@ public class ArticleService {
 				
 				String articleTime=rowMap.get("article_time")==null?"":rowMap.get("article_time").toString();
 				
+				if(articleTime!=null&&articleTime!=""){
+					
+					articleTime=articleTime.substring(0,articleTime.length()-2);
+					
+				}
+				
 				String articleShortContent=rowMap.get("article_short_content")==null?"":rowMap.get("article_short_content").toString();
 				
 				String articleContent=rowMap.get("article_content")==null?"":rowMap.get("article_content").toString();
+				
+				String articlePageView=rowMap.get("article_page_view")==null?"":rowMap.get("article_page_view").toString();
 				
 				rowJson.put("id", id);			
 				rowJson.put("articleTitle", articleTitle);
 				rowJson.put("articleTime", articleTime);
 				rowJson.put("articleShortContent",articleShortContent);
 				rowJson.put("articleContent", articleContent);
+				rowJson.put("articlePageView",articlePageView);
 				
 				jsonArray.add(rowJson);
 				
@@ -185,7 +202,7 @@ public class ArticleService {
 			
 			articleContent=json.getString("acticleContent");
 						
-			String sql="insert into article (id,article_title,article_time,article_short_content,article_content) values(?,?,?,?,?);";			
+			String sql="insert into article (id,article_title,article_time,article_short_content,article_content,article_page_view) values(?,?,?,?,?,?);";			
 				
 			UUID uuid=UUID.randomUUID();
 			
@@ -194,8 +211,10 @@ public class ArticleService {
 			SimpleDateFormat sf=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 			
 			String nowDate=sf.format(date);
+			
+			String articlePageView="0";
 		
-			jdbcTemplate.update(sql, new Object[]{uuid.toString(),articleTitle,nowDate,articleShortContent,articleContent});
+			jdbcTemplate.update(sql, new Object[]{uuid.toString(),articleTitle,nowDate,articleShortContent,articleContent,articlePageView});
 			
 			resultCode="1";
 						
@@ -251,7 +270,7 @@ public class ArticleService {
 			String sql="update article set article_title=? , article_time=? , article_short_content=? , article_content=? where id=?";							
 			
 			jdbcTemplate.update(sql, new Object[]{articleTitle,articleTime,articleShortContent,articleContent,articleId});
-			
+								
 			resultCode="1";
 						
 		}catch(Exception e){
@@ -264,6 +283,54 @@ public class ArticleService {
 		return resultJson.toString();
 	}
 
+
+	public String updateArticlePageView(String articleJson) {
+		
+		JSONObject resultJson=new JSONObject();
+		
+		String resultCode="";
+		
+		try{
+			
+			JSONObject json=JSONObject.fromObject(articleJson);
+						
+			String id=json.getString("id");
+			
+			String querySql="select article_page_view from article where article_id=?";
+			
+			List<Map<String,Object>> resultMapList=jdbcTemplate.queryForList(querySql,new Object[]{id});
+			
+			if(resultMapList.size()!=0){
+				
+				String pageView=resultMapList.get(0).get("article_page_view").toString();
+				
+				pageView=(Integer.valueOf(pageView)+1)+"";
+				
+				String sql="update article set article_page_view =? where article_id=?";				
+				
+				jdbcTemplate.update(sql,new Object[]{pageView,id});
+				
+				resultCode=1+"";
+				
+			}else{
+				
+				resultCode=0+"";
+				
+			}
+									
+		}catch(Exception e){
+			
+			resultCode=2+"";
+			
+		}
+		
+		resultJson.put("resultCode", resultCode);
+		
+		return resultJson.toString();
+	}
+	
+	
+	
 
 	
 		
