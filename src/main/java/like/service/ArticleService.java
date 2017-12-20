@@ -284,19 +284,15 @@ public class ArticleService {
 	}
 
 
-	public String updateArticlePageView(String articleJson) {
+	public String updateArticlePageView(String id) {
 		
 		JSONObject resultJson=new JSONObject();
 		
 		String resultCode="";
 		
-		try{
+		try{			
 			
-			JSONObject json=JSONObject.fromObject(articleJson);
-						
-			String id=json.getString("id");
-			
-			String querySql="select article_page_view from article where article_id=?";
+			String querySql="select article_page_view from article where id=?";
 			
 			List<Map<String,Object>> resultMapList=jdbcTemplate.queryForList(querySql,new Object[]{id});
 			
@@ -306,7 +302,7 @@ public class ArticleService {
 				
 				pageView=(Integer.valueOf(pageView)+1)+"";
 				
-				String sql="update article set article_page_view =? where article_id=?";				
+				String sql="update article set article_page_view =? where id=?";				
 				
 				jdbcTemplate.update(sql,new Object[]{pageView,id});
 				

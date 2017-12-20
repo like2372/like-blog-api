@@ -96,8 +96,10 @@ public class ArticleController {
 	
 	@ApiOperation("根据文章id修改浏览量")
 	@RequestMapping(value="/updateArticlePageView",method=RequestMethod.GET)
-	public String updateArticlePageView(HttpServletRequest res,@RequestParam  String articleJson){	
-						
-		return articleService.updateArticlePageView(articleJson);	
+	public String updateArticlePageView(HttpServletRequest res){	
+		
+		String id=res.getParameter("id");
+		
+		return articleService.updateArticlePageView(id);	
 	}
 }
