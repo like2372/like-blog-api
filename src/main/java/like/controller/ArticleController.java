@@ -71,19 +71,9 @@ public class ArticleController {
 	
 	@ApiOperation("修改文章")
 	@RequestMapping(value="/updateArticleData",method=RequestMethod.POST)
-	public String updateArticleData(HttpServletRequest res,@RequestParam  String articleJson){		
-	
-		String articleId=res.getParameter("articleId");
+	public String updateArticleData(HttpServletRequest res,@RequestParam  String articleJson){					
 		
-		String articleTitle=res.getParameter("articleTitle");
-		
-		String articleTime=res.getParameter("articleTime");
-		
-		String articleShortContent=res.getParameter("articleShortContent");
-		
-		String articleContent=res.getParameter("articleContent");
-		
-		return articleService.updateArticleData(articleId,articleTitle,articleTime,articleShortContent,articleContent);	
+		return articleService.updateArticleData(articleJson);	
 	}
 	
 	@ApiOperation("根据文章id删除文章")

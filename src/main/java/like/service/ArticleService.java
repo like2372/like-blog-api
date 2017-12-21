@@ -257,9 +257,7 @@ public class ArticleService {
 		return resultJson.toString();
 	}
 
-	public String updateArticleData(String articleId, String articleTitle,
-			String articleTime, String articleShortContent,
-			String articleContent) {
+	public String updateArticleData(String articleJson) {
 		
 		String resultCode="";
 		
@@ -267,9 +265,19 @@ public class ArticleService {
 		
 		try{
 			
-			String sql="update article set article_title=? , article_time=? , article_short_content=? , article_content=? where id=?";							
+			JSONObject json=JSONObject.fromObject(articleJson);
 			
-			jdbcTemplate.update(sql, new Object[]{articleTitle,articleTime,articleShortContent,articleContent,articleId});
+			String articleId=json.getString("acticleId");
+			
+			String articleTitle=json.getString("acticleTitle");
+			
+			String articleShortContent=json.getString("acticleShortContent");
+			
+			String articleContent=json.getString("acticleContent");
+			
+			String sql="update article set article_title=? , article_short_content=? , article_content=? where id=?";							
+			
+			jdbcTemplate.update(sql, new Object[]{articleTitle,articleShortContent,articleContent,articleId});
 								
 			resultCode="1";
 						
