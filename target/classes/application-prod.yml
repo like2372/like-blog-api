@@ -17,3 +17,5 @@ spring:
     password: root1234@
     driver-class-name: com.mysql.jdbc.Driver
 
+upload: 
+  path: /likeblog/nginx/html/static/likeImg/

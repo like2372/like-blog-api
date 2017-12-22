@@ -1,5 +1,12 @@
 package like.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -9,7 +16,9 @@ import io.swagger.annotations.ApiResponses;
 
 import javax.servlet.http.HttpServletRequest;
 
+import like.config.EntityConfig;
 import like.service.ArticleService;
+import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 
 @RestController
@@ -28,6 +40,9 @@ public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	@Autowired
+	private EntityConfig entityConfig;
 		
 	@ApiOperation("获取文章列表")
 	@ApiImplicitParams({
@@ -82,8 +97,7 @@ public class ArticleController {
 						
 		return articleService.deleteArticleData(articleJson);	
 	}
-	
-	
+		
 	@ApiOperation("根据文章id修改浏览量")
 	@RequestMapping(value="/updateArticlePageView",method=RequestMethod.GET)
 	public String updateArticlePageView(HttpServletRequest res){	
@@ -91,5 +105,67 @@ public class ArticleController {
 		String id=res.getParameter("id");
 		
 		return articleService.updateArticlePageView(id);	
+	}
+	
+	@ApiOperation("上传文件")
+	@RequestMapping(value="/uploadFile",method=RequestMethod.POST)
+	public String uploadFile(HttpServletRequest res){	
+		
+		
+		JSONObject resultJson=new JSONObject();
+		
+		String result="";
+		
+		String resultCode="";
+		
+		try{
+			
+			long startTime=System.currentTimeMillis();
+			
+			List<MultipartFile> files = ((MultipartHttpServletRequest) res).getFiles("file");
+			
+			MultipartFile file = null;
+			
+		    BufferedOutputStream stream = null;
+		    
+		    for(int i=0;i<files.size();i++){
+		    	
+		    	file=files.get(i);
+		    	
+		    	if(file!=null){
+		    		
+		    		 byte[] bytes = file.getBytes();		    		 		    		 
+		    		 
+		    		 stream = new BufferedOutputStream(new FileOutputStream(new File(entityConfig.getUploadPath()+file.getOriginalFilename())));
+		    		 
+		    		 System.out.println(entityConfig.getUploadPath()+file.getOriginalFilename());
+		    		 
+		    		 stream.write(bytes);
+		    		 
+		    		 stream.close();
+		    	}
+		    } 
+			
+		    long endTime=System.currentTimeMillis();
+		    
+		    String allTime=(endTime-startTime)/1000+"ms";
+		    
+			resultCode="1";
+				
+			result="成功,总用时"+allTime;
+					
+		}catch(Exception e){
+			
+			resultCode="0";
+			
+			result=e.getMessage();
+		}
+		
+		resultJson.put("resultCode", resultCode);
+		
+		resultJson.put("result", result);
+		
+		return resultJson.toString();
+				
 	}
 }

@@ -7,4 +7,5 @@ public class Constants {
     public static final int JWT_TTL = 30 * 60 * 1000;
     public static final int JWT_REFRESH_INTERVAL = 25 * 60 * 1000;
     public static final int JWT_REFRESH_TTL = 12 * 60 * 60 * 1000;
+    
 }
