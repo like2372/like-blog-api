@@ -1,7 +1,7 @@
 package like.util;
 
 import io.jsonwebtoken.*;
-import like.entity.User;
+import like.entity.UserEntity;
 import like.util.Constants;
 import net.sf.json.JSONObject;
 
@@ -95,7 +95,7 @@ public class JWTUtil {
      * @param user
      * @return
      */
-    public static String generalSubject(User user) {
+    public static String generalSubject(UserEntity user) {
         JSONObject jo = new JSONObject();
         jo.put("userId", user.getId());
         jo.put("username", user.getUserName());
