@@ -6,7 +6,7 @@ package like.entity;
  * @author like
  *
  */
-public class Article {
+public class ArticleEntity {
 
 	/**
 	 * 文章唯一id

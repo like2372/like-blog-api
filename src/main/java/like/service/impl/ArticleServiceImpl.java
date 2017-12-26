@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import like.entity.ArticleEntity;
+import like.mapper.ArticleMapper;
 import like.service.ArticleService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class ArticleServiceImpl implements ArticleService{
 	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private ArticleMapper articleMapper;
 	
 	
 	/**
@@ -40,53 +42,54 @@ public class ArticleServiceImpl implements ArticleService{
 		
 		try{
 			
-			String sql="select id,article_title,article_time,article_short_content,article_page_view from article order by article_time desc";
-			
-			if(start!=null&&start!=""&&end!=null&&end!=""){
+						
+			if(start==null||start==""||end==null||end==""){
 				
-				sql+=" limit "+start+","+end;
+				resultCode="0";
+					
+				json.put("data", jsonArray);
+				
+				json.put("resultCode", resultCode);
+				
+				json.put("totalNumber", totalNumber);
+				
+				return json.toString();
 			}
-												
-			List<Map<String,Object>> resultList=jdbcTemplate.queryForList(sql);
 			
-			for(int i=0;i<resultList.size();i++){
+			List<ArticleEntity> articleList=articleMapper.getArticleList(Integer.parseInt(start),Integer.parseInt(end));													
+			
+			for(int i=0;i<articleList.size();i++){
 				
 				JSONObject rowJson=new JSONObject();
 				
-				Map<String,Object> rowMap=resultList.get(i);
+				ArticleEntity article=articleList.get(i);
 				
-				String id=rowMap.get("id")==null?"":rowMap.get("id").toString();								
+				String id=article.getId()==null?"":article.getId().toString();								
 				
-				String articleTitle=rowMap.get("article_title")==null?"":rowMap.get("article_title").toString();
+				String articleTitle=article.getArticleTitle()==null?"":article.getArticleTitle().toString();
 				
-				String articleTime=rowMap.get("article_time")==null?"":rowMap.get("article_time").toString();
+				String articleTime=article.getArticleTime()==null?"":article.getArticleTime().toString();
 				
-				if(articleTime!=null&&articleTime!=""){
+				/*if(articleTime!=null&&articleTime!=""){
 					
 					articleTime=articleTime.substring(0,articleTime.length()-2);
 					
-				}
+				}*/
 				
-				String articleShortContent=rowMap.get("article_short_content")==null?"":rowMap.get("article_short_content").toString();
+				String articleShortContent=article.getArticleShortContent()==null?"":article.getArticleShortContent().toString();
 				
-				String articlePageView=rowMap.get("article_page_view")==null?"":rowMap.get("article_page_view").toString();
-				//String articleContent=rowMap.get("article_content")==null?"":rowMap.get("article_content").toString();
+				String articlePageView=article.getArticlePageView()==null?"":article.getArticlePageView().toString();
 				
 				rowJson.put("id", id);			
 				rowJson.put("articleTitle", articleTitle);
 				rowJson.put("articleTime", articleTime);
 				rowJson.put("articleShortContent",articleShortContent);
 				rowJson.put("articlePageView",articlePageView);
-				//rowJson.put("articleContent", articleContent);
 				
 				jsonArray.add(rowJson);
 			}
-			
-			String totalSql="select count(*) as total from article";
-			
-			List<Map<String,Object>> totalResultList=jdbcTemplate.queryForList(totalSql);
-			
-			totalNumber=totalResultList.get(0).get("total").toString();
+				
+			totalNumber=articleMapper.getTotal();
 			
 			resultCode="1";
 			
@@ -119,55 +122,39 @@ public class ArticleServiceImpl implements ArticleService{
 			
 		String resultCode="";
 		
-		try{
+		try{			
 			
-			String sql="select id,article_title,article_time,article_short_content,article_content,article_page_view from article where 1=1 ";
-			
-			if(id!=null&&id!=""){
+			ArticleEntity article=articleMapper.getArticleDetail(id);
+									
+			JSONObject rowJson=new JSONObject();														
 				
-				sql+=" and id='"+id+"'";
-			}
+			String articleTitle=article.getArticleTitle()==null?"":article.getArticleTitle().toString();
+				
+			String articleTime=article.getArticleTime()==null?"":article.getArticleTime().toString();
+				
+			/*if(articleTime!=null&&articleTime!=""){
+					
+				articleTime=articleTime.substring(0,articleTime.length()-2);
+					
+			}*/
+				
+			String articleShortContent=article.getArticleShortContent()==null?"":article.getArticleShortContent().toString();
+				
+			String articleContent=article.getArticleContent()==null?"":article.getArticleContent().toString();
+				
+			String articlePageView=article.getArticlePageView()==null?"":article.getArticlePageView().toString();
+				
+			rowJson.put("id", id);			
+			rowJson.put("articleTitle", articleTitle);
+			rowJson.put("articleTime", articleTime);
+			rowJson.put("articleShortContent",articleShortContent);
+			rowJson.put("articleContent", articleContent);
+			rowJson.put("articlePageView",articlePageView);
+				
+			jsonArray.add(rowJson);
+				
+			resultCode="1";
 												
-			List<Map<String,Object>> resultList=jdbcTemplate.queryForList(sql);
-			
-			if(resultList.size()==1){
-				
-				JSONObject rowJson=new JSONObject();
-				
-				Map<String,Object> rowMap=resultList.get(0);											
-				
-				String articleTitle=rowMap.get("article_title")==null?"":rowMap.get("article_title").toString();
-				
-				String articleTime=rowMap.get("article_time")==null?"":rowMap.get("article_time").toString();
-				
-				if(articleTime!=null&&articleTime!=""){
-					
-					articleTime=articleTime.substring(0,articleTime.length()-2);
-					
-				}
-				
-				String articleShortContent=rowMap.get("article_short_content")==null?"":rowMap.get("article_short_content").toString();
-				
-				String articleContent=rowMap.get("article_content")==null?"":rowMap.get("article_content").toString();
-				
-				String articlePageView=rowMap.get("article_page_view")==null?"":rowMap.get("article_page_view").toString();
-				
-				rowJson.put("id", id);			
-				rowJson.put("articleTitle", articleTitle);
-				rowJson.put("articleTime", articleTime);
-				rowJson.put("articleShortContent",articleShortContent);
-				rowJson.put("articleContent", articleContent);
-				rowJson.put("articlePageView",articlePageView);
-				
-				jsonArray.add(rowJson);
-				
-				resultCode="1";
-				
-			}	else{
-				
-				resultCode="0";
-			}		
-						
 		}catch(Exception e){
 			
 			resultCode="0";
@@ -207,9 +194,7 @@ public class ArticleServiceImpl implements ArticleService{
 			articleShortContent=json.getString("acticleShortContent");
 			
 			articleContent=json.getString("acticleContent");
-						
-			String sql="insert into article (id,article_title,article_time,article_short_content,article_content,article_page_view) values(?,?,?,?,?,?);";			
-				
+			
 			UUID uuid=UUID.randomUUID();
 			
 			Date date=new Date();
@@ -219,8 +204,22 @@ public class ArticleServiceImpl implements ArticleService{
 			String nowDate=sf.format(date);
 			
 			String articlePageView="0";
-		
-			jdbcTemplate.update(sql, new Object[]{uuid.toString(),articleTitle,nowDate,articleShortContent,articleContent,articlePageView});
+			
+			ArticleEntity article=new ArticleEntity();
+			
+			article.setId(uuid.toString());
+	
+			article.setArticleTitle(articleTitle);
+			
+			article.setArticleShortContent(articleShortContent);
+			
+			article.setArticleContent(articleContent);
+			
+			article.setArticleTime(nowDate);
+			
+			article.setArticlePageView(articlePageView);
+				
+			articleMapper.insertArticle(article);
 			
 			resultCode="1";
 						
@@ -252,9 +251,7 @@ public class ArticleServiceImpl implements ArticleService{
 			
 			String articleId=articleStringJson.getString("id");
 			
-			String sql="delete from article where id=?";							
-			
-			jdbcTemplate.update(sql, new Object[]{articleId});
+			articleMapper.deleteArticle(articleId);
 			
 			resultCode="1";
 						
@@ -291,9 +288,17 @@ public class ArticleServiceImpl implements ArticleService{
 			
 			String articleContent=json.getString("acticleContent");
 			
-			String sql="update article set article_title=? , article_short_content=? , article_content=? where id=?";							
+			ArticleEntity article=new ArticleEntity();
 			
-			jdbcTemplate.update(sql, new Object[]{articleTitle,articleShortContent,articleContent,articleId});
+			article.setId(articleId);
+			
+			article.setArticleTitle(articleTitle);
+			
+			article.setArticleShortContent(articleShortContent);
+			
+			article.setArticleContent(articleContent);
+				
+			articleMapper.updateArticleData(article);
 								
 			resultCode="1";
 						
@@ -320,26 +325,21 @@ public class ArticleServiceImpl implements ArticleService{
 		
 		try{			
 			
-			String querySql="select article_page_view from article where id=?";
+			ArticleEntity article=articleMapper.getArticleDetail(id);
 			
-			List<Map<String,Object>> resultMapList=jdbcTemplate.queryForList(querySql,new Object[]{id});
-			
-			if(resultMapList.size()!=0){
+			if(article.getId()!=null&&article.getId()!=""){
 				
-				String pageView=resultMapList.get(0).get("article_page_view").toString();
+				String pageView=article.getArticlePageView();
 				
 				pageView=(Integer.valueOf(pageView)+1)+"";
 				
-				String sql="update article set article_page_view =? where id=?";				
-				
-				jdbcTemplate.update(sql,new Object[]{pageView,id});
+				articleMapper.updateArticlePageView(id, pageView);
 				
 				resultCode=1+"";
 				
 			}else{
 				
-				resultCode=0+"";
-				
+				resultCode=0+"";			
 			}
 									
 		}catch(Exception e){

@@ -3,7 +3,11 @@ package like.service;
 
 import org.springframework.stereotype.Service;
 
-
+/**
+ * 文章接口
+ * @author like
+ *
+ */
 @Service
 public interface ArticleService {
 	
