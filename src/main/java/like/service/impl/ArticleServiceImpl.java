@@ -70,11 +70,11 @@ public class ArticleServiceImpl implements ArticleService{
 				
 				String articleTime=article.getArticleTime()==null?"":article.getArticleTime().toString();
 				
-				/*if(articleTime!=null&&articleTime!=""){
+				if(articleTime!=null&&articleTime!=""){
 					
 					articleTime=articleTime.substring(0,articleTime.length()-2);
 					
-				}*/
+				}
 				
 				String articleShortContent=article.getArticleShortContent()==null?"":article.getArticleShortContent().toString();
 				
@@ -132,11 +132,11 @@ public class ArticleServiceImpl implements ArticleService{
 				
 			String articleTime=article.getArticleTime()==null?"":article.getArticleTime().toString();
 				
-			/*if(articleTime!=null&&articleTime!=""){
+			if(articleTime!=null&&articleTime!=""){
 					
 				articleTime=articleTime.substring(0,articleTime.length()-2);
 					
-			}*/
+			}
 				
 			String articleShortContent=article.getArticleShortContent()==null?"":article.getArticleShortContent().toString();
 				

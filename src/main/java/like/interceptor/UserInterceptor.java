@@ -3,31 +3,31 @@ package like.interceptor;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import like.util.JWTUtil;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+@Aspect
 public class UserInterceptor implements HandlerInterceptor{
-
+	
 	@Override
 	public void afterCompletion(HttpServletRequest req,
 			HttpServletResponse res, Object arg2, Exception arg3)
 			throws Exception {
 		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest req, HttpServletResponse res,
 			Object arg2, ModelAndView arg3) throws Exception {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
 		
 	}
 
@@ -81,4 +81,5 @@ public class UserInterceptor implements HandlerInterceptor{
             }
         }
     }
+     
 }
