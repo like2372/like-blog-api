@@ -14,11 +14,12 @@ import org.apache.ibatis.annotations.Update;
 
 public interface ArticleMapper {
 	
-	@Select("SELECT id,article_title,article_time,article_short_content,article_page_view FROM article ORDER BY article_time DESC LIMIT #{start} , #{end} ")
+	@Select("SELECT id,article_title,article_time,article_tag,article_short_content,article_page_view FROM article ORDER BY article_time DESC LIMIT #{start} , #{end} ")
 	@Results({
 		@Result(property="id",column="id"),
 		@Result(property="articleTitle",column="article_title"),
 		@Result(property="articleTime",column="article_time"),
+		@Result(property="articleTag",column="article_tag"),
 		@Result(property="articleShortContent",column="article_short_content"),
 		@Result(property="articlePageView",column="article_page_view"),
 	})
@@ -32,19 +33,20 @@ public interface ArticleMapper {
 		@Result(property="id",column="id"),
 		@Result(property="articleTitle",column="article_title"),
 		@Result(property="articleTime",column="article_time"),
+		@Result(property="articleTag",column="article_tag"),
 		@Result(property="articleContent",column="article_content"),		
 		@Result(property="articleShortContent",column="article_short_content"),
 		@Result(property="articlePageView",column="article_page_view"),
 	})
 	ArticleEntity getArticleDetail(String id);
 	
-	@Insert("insert into article (id,article_title,article_time,article_short_content,article_content,article_page_view) values(#{id},#{articleTitle},#{articleTime},#{articleContent},#{articleShortContent},#{articlePageView})")
+	@Insert("insert into article (id,article_title,article_time,article_tag,article_short_content,article_content,article_page_view) values(#{id},#{articleTitle},#{articleTime},#{articleTag},#{articleContent},#{articleShortContent},#{articlePageView})")
 	void insertArticle(ArticleEntity article);
 	
 	@Delete("delete from article where id=#{id}")
 	void deleteArticle(String id);
 	
-	@Update("update article set article_title=#{articleTitle} , article_short_content=#{articleShortContent} , article_content=#{articleContent} where id=#{id}")
+	@Update("update article set article_title=#{articleTitle} ,article_tag=#{articleTag}, article_short_content=#{articleShortContent} , article_content=#{articleContent} where id=#{id}")
 	void updateArticleData(ArticleEntity article);
 	
 	@Update("update article set article_page_view =#{pageView} where id=#{id}")

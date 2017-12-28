@@ -80,11 +80,14 @@ public class ArticleServiceImpl implements ArticleService{
 				
 				String articlePageView=article.getArticlePageView()==null?"":article.getArticlePageView().toString();
 				
+				String articleTage=article.getArticleTag()==null?"":article.getArticleTag().toString();
+				
 				rowJson.put("id", id);			
 				rowJson.put("articleTitle", articleTitle);
 				rowJson.put("articleTime", articleTime);
 				rowJson.put("articleShortContent",articleShortContent);
 				rowJson.put("articlePageView",articlePageView);
+				rowJson.put("articleTage", articleTage);
 				
 				jsonArray.add(rowJson);
 			}
@@ -143,6 +146,8 @@ public class ArticleServiceImpl implements ArticleService{
 			String articleContent=article.getArticleContent()==null?"":article.getArticleContent().toString();
 				
 			String articlePageView=article.getArticlePageView()==null?"":article.getArticlePageView().toString();
+			
+			String articleTage=article.getArticleTag()==null?"":article.getArticleTag().toString();
 				
 			rowJson.put("id", id);			
 			rowJson.put("articleTitle", articleTitle);
@@ -150,6 +155,7 @@ public class ArticleServiceImpl implements ArticleService{
 			rowJson.put("articleShortContent",articleShortContent);
 			rowJson.put("articleContent", articleContent);
 			rowJson.put("articlePageView",articlePageView);
+			rowJson.put("articleTage", articleTage);
 				
 			jsonArray.add(rowJson);
 				
@@ -183,6 +189,8 @@ public class ArticleServiceImpl implements ArticleService{
 		
 		String articleContent="";
 		
+		String articleTag="";
+		
 		JSONObject resultJson=new JSONObject();
 		
 		try{
@@ -191,10 +199,12 @@ public class ArticleServiceImpl implements ArticleService{
 						
 			articleTitle=json.getString("acticleTitle");
 			
+			articleTag=json.getString("articleTag");
+			
 			articleShortContent=json.getString("acticleShortContent");
 			
 			articleContent=json.getString("acticleContent");
-			
+				
 			UUID uuid=UUID.randomUUID();
 			
 			Date date=new Date();
@@ -210,6 +220,8 @@ public class ArticleServiceImpl implements ArticleService{
 			article.setId(uuid.toString());
 	
 			article.setArticleTitle(articleTitle);
+			
+			article.setArticleTag(articleTag);
 			
 			article.setArticleShortContent(articleShortContent);
 			
@@ -284,6 +296,8 @@ public class ArticleServiceImpl implements ArticleService{
 			
 			String articleTitle=json.getString("acticleTitle");
 			
+			String articleTag=json.getString("articleTag");
+			
 			String articleShortContent=json.getString("acticleShortContent");
 			
 			String articleContent=json.getString("acticleContent");
@@ -293,6 +307,8 @@ public class ArticleServiceImpl implements ArticleService{
 			article.setId(articleId);
 			
 			article.setArticleTitle(articleTitle);
+			
+			article.setArticleTag(articleTag);
 			
 			article.setArticleShortContent(articleShortContent);
 			

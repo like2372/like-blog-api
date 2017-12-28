@@ -37,6 +37,11 @@ public class ArticleEntity {
 	 * 文章浏览量
 	 */
 	private String articlePageView;
+	
+	/**
+	 * 文章标签
+	 */
+	private String articleTag;
 
 	public String getId() {
 		return id;
@@ -85,6 +90,13 @@ public class ArticleEntity {
 	public void setArticlePageView(String articlePageView) {
 		this.articlePageView = articlePageView;
 	}
-	
-	
+
+	public String getArticleTag() {
+		return articleTag;
+	}
+
+	public void setArticleTag(String articleTag) {
+		this.articleTag = articleTag;
+	}
+		
 }
