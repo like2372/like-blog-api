@@ -199,7 +199,7 @@ public class ArticleServiceImpl implements ArticleService{
 						
 			articleTitle=json.getString("acticleTitle");
 			
-			articleTag=json.getString("articleTag");
+			articleTag=json.getString("acticleTag");
 			
 			articleShortContent=json.getString("acticleShortContent");
 			
@@ -296,7 +296,7 @@ public class ArticleServiceImpl implements ArticleService{
 			
 			String articleTitle=json.getString("acticleTitle");
 			
-			String articleTag=json.getString("articleTag");
+			String articleTag=json.getString("acticleTag");
 			
 			String articleShortContent=json.getString("acticleShortContent");
 			
