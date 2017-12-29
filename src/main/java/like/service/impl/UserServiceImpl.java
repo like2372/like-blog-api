@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
 	 * @param password
 	 * @return 是否成功json字符串
 	 */
+	@Override
 	public String checkUser(String userName,String password) {
 		
 		JSONObject resultJson=new JSONObject();
@@ -85,6 +86,7 @@ public class UserServiceImpl implements UserService {
 	 * @param password
 	 * @return 是否成功json字符串
 	 */
+	@Override
 	public String addUser(String userName,String password){
 		
 		JSONObject resultJson=new JSONObject();
@@ -149,6 +151,7 @@ public class UserServiceImpl implements UserService {
 	 * @param id
 	 * @return 是否成功json字符串
 	 */
+	@Override
 	public String delUser(String id) {
 		
 		JSONObject resultJson=new JSONObject();

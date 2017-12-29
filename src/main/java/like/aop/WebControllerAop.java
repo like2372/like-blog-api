@@ -106,7 +106,9 @@ public class WebControllerAop {
      */
     private Map<String,String> getContentByPath(String path){
     		
-    	if(path==null||path=="")return null;
+    	if(path==null||path=="") {
+			return null;
+		}
     	
     	String content="";
     	

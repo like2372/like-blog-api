@@ -30,6 +30,7 @@ public class ArticleServiceImpl implements ArticleService{
 	 * @param end
 	 * @return
 	 */
+	@Override
 	public String getArticleList(String start, String end){
 		
 		JSONObject json=new JSONObject();
@@ -117,6 +118,7 @@ public class ArticleServiceImpl implements ArticleService{
 	 * @param req
 	 * @return
 	 */
+	@Override
 	public String getArticleDetail(String id) {
 		
 		JSONObject json=new JSONObject();
@@ -179,6 +181,7 @@ public class ArticleServiceImpl implements ArticleService{
 	 * @param articleJson
 	 * @return 是否成功json字符串
 	 */
+	@Override
 	public String InsertArticleData(String articleJson){
 			
 		String resultCode="";
@@ -251,6 +254,7 @@ public class ArticleServiceImpl implements ArticleService{
 	 * @param articleJson
 	 * @return 是否成功json字符串
 	 */
+	@Override
 	public String deleteArticleData(String articleJson) {
 		
 		String resultCode="";
@@ -282,6 +286,7 @@ public class ArticleServiceImpl implements ArticleService{
 	 * @param articleJson
 	 * @return 是否成功json字符串
 	 */
+	@Override
 	public String updateArticleData(String articleJson) {
 		
 		String resultCode="";
@@ -333,6 +338,7 @@ public class ArticleServiceImpl implements ArticleService{
 	 * @param id
 	 * @return 是否成功json字符串
 	 */
+	@Override
 	public String updateArticlePageView(String id) {
 		
 		JSONObject resultJson=new JSONObject();
