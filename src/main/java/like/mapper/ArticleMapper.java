@@ -40,7 +40,7 @@ public interface ArticleMapper {
 	})
 	ArticleEntity getArticleDetail(String id);
 	
-	@Insert("insert into article (id,article_title,article_time,article_tag,article_short_content,article_content,article_page_view) values(#{id},#{articleTitle},#{articleTime},#{articleTag},#{articleContent},#{articleShortContent},#{articlePageView})")
+	@Insert("insert into article (id,article_title,article_time,article_tag,article_short_content,article_content,article_page_view) values(#{id},#{articleTitle},#{articleTime},#{articleTag},#{articleShortContent},#{articleContent},#{articlePageView})")
 	void insertArticle(ArticleEntity article);
 	
 	@Delete("delete from article where id=#{id}")
