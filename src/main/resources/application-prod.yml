@@ -13,7 +13,7 @@ dataSource:
 spring: 
   datasource: 
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://rm-uf6tv42kdrjl8z5y7o.mysql.rds.aliyuncs.com/likeblog?useSSL=false
+    url: jdbc:mysql://123.56.21.128:3306/likeblog?useSSL=false
     username: root
     password: root1234@
     driver-class-name: com.mysql.jdbc.Driver
