@@ -1,5 +1,7 @@
 package like.mapper;
 
+import java.util.List;
+
 import like.entity.LogEntity;
 
 import org.apache.ibatis.annotations.Delete;
@@ -11,7 +13,7 @@ import org.apache.ibatis.annotations.Results;
 
 public interface LogsMapper {
 	
-	@Select("SELECT * FROM bloglogs ORDER BY time DESC WHERE LIMIT #{start} , #{end}")
+	@Select("SELECT * FROM bloglogs ORDER BY time DESC LIMIT #{start} , #{end}")
 	@Results({
 		@Result(property="id",column="id"),
 		@Result(property="time",column="time"),
@@ -20,9 +22,9 @@ public interface LogsMapper {
 		@Result(property="content",column="content"),
 		@Result(property="path",column="path")
 	})
-	LogEntity getLogsList(@Param("start")int start,@Param("end")int end);
+	List<LogEntity> getLogsList(@Param("start")int start,@Param("end")int end);
 	
-	@Insert("INSERT INTO (id,time,ip,type,content,path) VALUES(#{id},#{time},#{ip},#{type},#{content},#{path})")
+	@Insert("INSERT INTO bloglogs (id,time,ip,type,content,path) VALUES(#{id},#{time},#{ip},#{type},#{content},#{path})")
 	void insertLogs(LogEntity log);
 	
 	@Delete("DELETE FROM bloglogs WHERE id=#{id}")

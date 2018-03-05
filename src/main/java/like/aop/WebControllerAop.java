@@ -5,16 +5,16 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
-import like.service.LogsService;
+import like.entity.LogEntity;
+import like.mapper.LogsMapper;
 import like.util.DicConstants;
 import like.util.HttpHelpUtil;
 
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -22,8 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -39,6 +37,8 @@ public class WebControllerAop {
 		
 	private Logger logger =  LoggerFactory.getLogger(this.getClass());
 	
+	@Autowired
+	private LogsMapper logsMapper;
 	@Pointcut("execution(* like.controller..*(..))")
 	public void exectueService(){
 		
@@ -49,36 +49,52 @@ public class WebControllerAop {
 	 */
 	@Before("exectueService()")
 	public void doBeforeAdvice(JoinPoint joinPoint){
-		
+						 
 		 ServletRequestAttributes attributes =(ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 
          HttpServletRequest request = (HttpServletRequest) attributes.getRequest();
          
          try{
         	 
+        	LogEntity log=new LogEntity(); 
+        	
+        	UUID uuid=UUID.randomUUID();
+        	
+        	log.setId(uuid.toString());
+        	
         	String ip=HttpHelpUtil.getIpAddress(request);
- 			   		   		
+ 			   
+        	log.setIp(ip);
+        	
       		Date date =new Date();
       		
       		SimpleDateFormat sf=new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
       		
       		String newDate=sf.format(date);
       		
+      		log.setTime(newDate);
+      		
+      		log.setPath(joinPoint.getSignature().getName());
+      		     		
       		Enumeration<String> enumer= request.getParameterNames();
-      		      	     		     		      		
-      		logger.info("用户的ip为"+ip);
-      		
-      		logger.info("当前时间为"+newDate);		
-      		
-      		logger.info("请求的方法为"+joinPoint.getSignature().getName());
-      		     			
+      		      	     		     		      		   		
       		while(enumer.hasMoreElements()){
       			
       			String value=(String)enumer.nextElement();
       			
-      			logger.info("参数为"+value+"值为"+request.getParameter(value));
+      			log.setContent("参数为"+value+"值为"+request.getParameter(value));
+      			
       		}
+		 
+      		logsMapper.insertLogs(log);
       		
+      		logger.info("用户的ip为"+log.getIp());
+      		
+      		logger.info("当前时间为"+log.getTime());		
+      		
+      		logger.info("请求的方法为"+log.getPath());
+      		     			
+      		logger.info(log.getContent());
       		
          }catch(Exception e){
         	 
