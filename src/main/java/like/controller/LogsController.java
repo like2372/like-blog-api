@@ -41,7 +41,13 @@ public class LogsController {
 		 
 		 String endNumber=res.getParameter("endNumber");
 		 
-		 return logsService.getLogs(startNumber, endNumber);
+		 String ip=res.getParameter("ip");
+		 
+		 String path=res.getParameter("path");
+		 
+		 String type=res.getParameter("type");
+		 
+		 return logsService.getLogs(startNumber, endNumber,ip,path,type);
 	 }
 	 
 	 

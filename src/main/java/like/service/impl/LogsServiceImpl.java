@@ -2,7 +2,9 @@ package like.service.impl;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import net.sf.json.JSONArray;
@@ -59,17 +61,38 @@ public class LogsServiceImpl implements LogsService{
 	}
 
 	@Override
-	public String getLogs(String startNumber, String endNumber) {
+	public String getLogs(String startNumber, String endNumber,String ip,String path,String type) {
 		
 		JSONObject resultJson=new JSONObject();
 		
 		JSONArray jsonarray=new JSONArray();
 					
 		String resultCode="";
+		
+		int totalNumber=0;
+		
 		try{
 			
-			List<LogEntity> logList=logsMapper.getLogsList(Integer.valueOf(startNumber), Integer.valueOf(endNumber));
+			int startNumberInteger=startNumber==null||startNumber==""?0:Integer.valueOf(startNumber);
 			
+			int endNumberInteger=endNumber==null||endNumber==""?0:Integer.valueOf(endNumber);
+			
+			int limitNumber=endNumberInteger-startNumberInteger;
+			
+			Map<String,Object> paramMap=new HashMap<String,Object>();
+			
+			paramMap.put("start", Integer.valueOf(startNumber));
+			
+			paramMap.put("limit", Integer.valueOf(limitNumber));
+			
+			paramMap.put("ip", ip);
+			
+			paramMap.put("path", path);
+			
+			paramMap.put("type", type);
+					
+			List<LogEntity> logList=logsMapper.getLogsList(paramMap);
+					
 			for(int i=0;i<logList.size();i++){
 				
 				JSONObject rowJson=new JSONObject();
@@ -89,7 +112,20 @@ public class LogsServiceImpl implements LogsService{
 				jsonarray.add(rowJson);
 				
 			}
-		
+			
+			// 查询总数
+			Map<String,Object> totalParamMap=new HashMap<String,Object>();
+			
+			totalParamMap.put("ip", ip);
+			
+			totalParamMap.put("path", path);
+			
+			totalParamMap.put("type", type);
+					
+			String totalNumberString= logsMapper.getLogsTotalNumber(totalParamMap);
+					
+			totalNumber=totalNumberString==null?0:Integer.valueOf(totalNumberString);
+			
 			resultCode="1";
 			
 		}catch(Exception e){
@@ -101,6 +137,8 @@ public class LogsServiceImpl implements LogsService{
 		}
 		
 		resultJson.put("resultCode", resultCode);
+		
+		resultJson.put("totalNumber",totalNumber);
 		
 		resultJson.put("data", jsonarray);
 		

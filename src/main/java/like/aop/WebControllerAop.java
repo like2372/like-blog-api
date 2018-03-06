@@ -63,8 +63,10 @@ public class WebControllerAop {
         	log.setId(uuid.toString());
         	
         	String ip=HttpHelpUtil.getIpAddress(request);
- 			   
-        	log.setIp(ip);
+ 			
+        	String realIp=request.getHeader("X-real-ip");
+        	
+        	log.setId(realIp);
         	
       		Date date =new Date();
       		
@@ -85,8 +87,13 @@ public class WebControllerAop {
       			log.setContent("参数为"+value+"值为"+request.getParameter(value));
       			
       		}
-		 
-      		logsMapper.insertLogs(log);
+      		
+      		if(log.getPath()!="getLogs"){
+      			
+      			logsMapper.insertLogs(log);
+      			
+      		}
+      		
       		
       		logger.info("用户的ip为"+log.getIp());
       		

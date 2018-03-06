@@ -1,6 +1,7 @@
 package like.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import like.entity.LogEntity;
 
@@ -13,7 +14,14 @@ import org.apache.ibatis.annotations.Results;
 
 public interface LogsMapper {
 	
-	@Select("SELECT * FROM bloglogs ORDER BY time DESC LIMIT #{start} , #{end}")
+	@Select("<script>"
+			+ "SELECT * FROM bloglogs WHERE 1=1 "
+			+ "<if test='ip!=null'> and ip=#{ip} </if>"
+			+ "<if test='path!=null'> and path=#{path} </if>"
+			+ "<if test='type!=null'> and type=#{type} </if>"
+			+ "ORDER BY time DESC "
+			+ "<if test='start!=null and limit!=null'> LIMIT #{start} , #{limit} </if>"
+			+ "</script>")
 	@Results({
 		@Result(property="id",column="id"),
 		@Result(property="time",column="time"),
@@ -22,7 +30,14 @@ public interface LogsMapper {
 		@Result(property="content",column="content"),
 		@Result(property="path",column="path")
 	})
-	List<LogEntity> getLogsList(@Param("start")int start,@Param("end")int end);
+	List<LogEntity> getLogsList(Map<String,Object> paramMap);
+	
+	@Select("<script>SELECT count(*) FROM bloglogs where 1=1 "
+			+ "<if test='ip!=null'> and ip=#{ip} </if>"
+			+ "<if test='path!=null'> and path=#{path} </if>"
+			+ "<if test='type!=null'> and type=#{type} </if>" 
+			+"</script>")	
+	String getLogsTotalNumber(Map<String,Object> paramMap);
 	
 	@Insert("INSERT INTO bloglogs (id,time,ip,type,content,path) VALUES(#{id},#{time},#{ip},#{type},#{content},#{path})")
 	void insertLogs(LogEntity log);

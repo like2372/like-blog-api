@@ -26,6 +26,6 @@ public interface LogsService {
 	 * @param endNumber
 	 * @return
 	 */
-	public String getLogs(String startNumber,String endNumber);
+	public String getLogs(String startNumber,String endNumber,String ip,String path,String type);
 
 }
