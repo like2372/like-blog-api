@@ -66,7 +66,7 @@ public class WebControllerAop {
  			
         	String realIp=request.getHeader("X-real-ip");
         	
-        	log.setId(realIp);
+        	log.setIp(realIp);
         	
       		Date date =new Date();
       		
